@@ -13,6 +13,7 @@ import helmet from 'helmet'
 import http from 'node:http'
 import path from 'node:path'
 import express from 'express'
+import lusca from 'lusca'
 import colors from 'colors/safe'
 import serveIndex from 'serve-index'
 import bodyParser from 'body-parser'
@@ -286,6 +287,8 @@ restoreOverwrittenFilesWithOriginals().then(() => {
 
   app.use(express.static(path.resolve('frontend/dist/frontend')))
   app.use(cookieParser('kekse'))
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(lusca.csrf())
   // vuln-code-snippet end directoryListingChallenge accessLogDisclosureChallenge
 
   /* Configure and enable backend-side i18n */
@@ -297,8 +300,6 @@ restoreOverwrittenFilesWithOriginals().then(() => {
     autoReload: true
   })
   app.use(i18n.init)
-
-  app.use(bodyParser.urlencoded({ extended: true }))
   /* File Upload */
   app.post('/file-upload', uploadToMemory.single('file'), ensureFileIsPassed, metrics.observeFileUploadMetricsMiddleware(), checkUploadSize, checkFileType, handleZipFileUpload, handleXmlUpload, handleYamlUpload)
   app.post('/profile/image/file', uploadToMemory.single('file'), ensureFileIsPassed, metrics.observeFileUploadMetricsMiddleware(), profileImageFileUpload())
