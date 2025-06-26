@@ -17,7 +17,17 @@ export function profileImageUrlUpload () {
   return async (req: Request, res: Response, next: NextFunction) => {
     if (req.body.imageUrl !== undefined) {
       const url = req.body.imageUrl
-      if (url.match(/(.)*solve\/challenges\/server-side(.)*/) !== null) req.app.locals.abused_ssrf_bug = true
+      const trustedDomains = ['example.com', 'images.com']; // Allow-list of trusted domains
+      try {
+        const parsedUrl = new URL(url);
+        if (!trustedDomains.includes(parsedUrl.hostname)) {
+          throw new Error('URL hostname is not trusted');
+        }
+        if (url.match(/(.)*solve\/challenges\/server-side(.)*/) !== null) req.app.locals.abused_ssrf_bug = true
+      } catch (error) {
+        next(new Error('Invalid or unsafe URL provided'));
+        return;
+      }
       const loggedInUser = security.authenticatedUsers.get(req.cookies.token)
       if (loggedInUser) {
         try {
