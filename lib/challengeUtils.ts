@@ -75,12 +75,13 @@ export const sendCodingChallengeNotification = function (challenge: { key: strin
 export const notSolved = (challenge: any) => challenge && !challenge.solved
 
 export const findChallengeByName = (challengeName: string) => {
+  const sanitizedChallengeName = challengeName.replace(/\n|\r/g, "")
   for (const challenge of Object.values(challenges)) {
-    if (challenge.name === challengeName) {
+    if (challenge.name === sanitizedChallengeName) {
       return challenge
     }
   }
-  logger.warn('Missing challenge with name: ' + challengeName)
+  logger.warn('Missing challenge with name: ' + sanitizedChallengeName)
 }
 
 export const findChallengeById = (challengeId: number) => {
