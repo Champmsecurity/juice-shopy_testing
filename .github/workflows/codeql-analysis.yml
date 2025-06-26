@@ -32,8 +32,9 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
 
-    - name: Upload CodeQL SARIF results
-      uses: actions/upload-artifact@v4.6.2
+    - name: Upload CodeQL database zip
+      uses: actions/upload-artifact@v3
       with:
-        name: codeql-results-${{ matrix.language }}
-        path: ${{ github.workspace }}/codeql-results/${{ matrix.language }}.sarif
+        name: codeql-database-javascript
+        path: /home/runner/work/_temp/codeql_databases/javascript.zip
+
