@@ -35,6 +35,4 @@ jobs:
     - name: Upload CodeQL database zip
       uses: actions/upload-artifact@v4.6.2
       with:
-        name: codeql-database-javascript
-        path: /home/runner/work/_temp/codeql_databases/javascript.zip
-
+       sarif_file: results.sarif
