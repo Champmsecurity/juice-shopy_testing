@@ -2,9 +2,7 @@ name: Security GHAS Checks
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: write
@@ -41,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v4.6.2
         with:
          name: results.sarif
-         path: /home/runner/work/juice-shopy_testingresults/javascript.sarif
+         path: /home/runner/work/juice-shopy_testing/results/javascript.sarif
