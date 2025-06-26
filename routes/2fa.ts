@@ -11,7 +11,8 @@ import * as challengeUtils from '../lib/challengeUtils'
 import * as utils from '../lib/utils'
 import { challenges } from '../data/datacache'
 import * as otplib from 'otplib'
-import * as security from '../lib/insecurity'
+import * as security from '../lib/insecurity';
+import bcrypt from 'bcrypt';
 
 otplib.authenticator.options = {
   // Accepts tokens as valid even when they are 30sec to old or to new
@@ -110,7 +111,7 @@ export async function setup (req: Request, res: Response) {
 
     const { password, setupToken, initialToken } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       throw new Error('Password doesnt match stored password')
     }
 
@@ -155,7 +156,7 @@ export async function disable (req: Request, res: Response) {
 
     const { password } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       throw new Error('Password doesnt match stored password')
     }
 
